@@ -1,23 +1,35 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-//希尔排序
-public class Shell {
-    public static void sort(Comparable[] a){
-        //将a[]按升序排列
-        int N =a.length;
-        int h = 1;
-        while (h<N/3) h=3*h+1; //此处根据tiny.txt文件字符串长度算出h为13
-        while (h>=1){
-            StdOut.println(h); // 13，4，1
-            for (int i=h;i<N;i++){
-                for (int j = i;j>=h&&less(a[j],a[j-h]);j-=h){
-                    exch(a,j,j-h);
-                }
-            }
-            h = h/3;
+//自顶向下归并排序
+public class Merge {
+    private static  Comparable[] aux;
+    public static void merge(Comparable[] a,int lo,int mid,int hi){
+        int i = lo; //左
+        int j=mid+1; //右
+        for (int k=lo;k<=hi;k++){
+            aux[k] = a[k];
+        }
+        for (int k=lo;k<=hi;k++){
+            if(i>mid) a[k] = aux[j++];
+            else if(j>hi) a[k] =aux[i++];
+            else if(less(aux[j],aux[i])) a[k]=aux[j++];
+            else a[k]=aux[i++];
         }
     }
+    public static void sort(Comparable[] a){
+        aux = new Comparable[a.length];
+        sort(a,0,a.length-1);
+    }
+    public static void sort(Comparable[] a,int lo,int hi){
+        if(hi<=lo) return;
+        int mid = lo + (hi - lo)/2;
+        sort(a,lo,mid);
+        sort(a,mid+1,hi);
+        merge(a,lo,mid,hi);
+    }
+    //公共方法
+    //=======
     private static boolean less(Comparable v,Comparable w){
         //比较大小
         return v.compareTo(w)<0;
