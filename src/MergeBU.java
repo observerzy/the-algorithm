@@ -1,7 +1,7 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-//自顶向下归并排序
+//自底向上归并排序
 public class MergeBU {
     private static  Comparable[] aux;
     public static void merge(Comparable[] a,int lo,int mid,int hi){
