@@ -1,32 +1,19 @@
+package sort;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-//自底向上归并排序
-public class MergeBU {
-    private static  Comparable[] aux;
-    public static void merge(Comparable[] a,int lo,int mid,int hi){
-        int i = lo; //左
-        int j=mid+1; //右
-        for (int k=lo;k<=hi;k++){
-            aux[k] = a[k];
-        }
-        for (int k=lo;k<=hi;k++){
-            if(i>mid) a[k] = aux[j++];
-            else if(j>hi) a[k] =aux[i++];
-            else if(less(aux[j],aux[i])) a[k]=aux[j++];
-            else a[k]=aux[i++];
-        }
-    }
+//插入排序
+public class Insertion {
     public static void sort(Comparable[] a){
-        aux = new Comparable[a.length];
-        for (int sz = 1;sz<a.length;sz=sz+sz){ //sz：子数组大小，1，2，4，8 ......
-            for(int lo =0;lo<a.length-sz;lo += sz+sz){ //lo：子数组索引
-                merge(a,lo,lo+sz-1,Math.min(lo+sz+sz-1,a.length-1)); // 子数组最后一个元素索引=子数组第一个元素索引+子数组长度-1
+        //将a[]按升序排列
+        int N =a.length;
+        for(int i=1;i<N;i++){
+            //将a[i]插入到a[i-1],a[i-2],a[i-3]...之中
+            for (int j = i;j>0&&less(a[j],a[j-1]);j--){
+                exch(a,j,j-1);
             }
         }
     }
-    //公共方法
-    //=======
     private static boolean less(Comparable v,Comparable w){
         //比较大小
         return v.compareTo(w)<0;
@@ -56,4 +43,3 @@ public class MergeBU {
         show(a);
     }
 }
-

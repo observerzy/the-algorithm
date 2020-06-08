@@ -1,18 +1,36 @@
+package sort;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-//插入排序
-public class Insertion {
-    public static void sort(Comparable[] a){
-        //将a[]按升序排列
-        int N =a.length;
-        for(int i=1;i<N;i++){
-            //将a[i]插入到a[i-1],a[i-2],a[i-3]...之中
-            for (int j = i;j>0&&less(a[j],a[j-1]);j--){
-                exch(a,j,j-1);
-            }
+//自顶向下归并排序
+public class Merge {
+    private static  Comparable[] aux;
+    public static void merge(Comparable[] a,int lo,int mid,int hi){
+        int i = lo; //左
+        int j=mid+1; //右
+        for (int k=lo;k<=hi;k++){
+            aux[k] = a[k];
+        }
+        for (int k=lo;k<=hi;k++){
+            if(i>mid) a[k] = aux[j++];
+            else if(j>hi) a[k] =aux[i++];
+            else if(less(aux[j],aux[i])) a[k]=aux[j++];
+            else a[k]=aux[i++];
         }
     }
+    public static void sort(Comparable[] a){
+        aux = new Comparable[a.length];
+        sort(a,0,a.length-1);
+    }
+    public static void sort(Comparable[] a,int lo,int hi){
+        if(hi<=lo) return;
+        int mid = lo + (hi - lo)/2;
+        sort(a,lo,mid);
+        sort(a,mid+1,hi);
+        merge(a,lo,mid,hi);
+    }
+    //公共方法
+    //=======
     private static boolean less(Comparable v,Comparable w){
         //比较大小
         return v.compareTo(w)<0;
